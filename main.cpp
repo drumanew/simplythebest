@@ -1,5 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include "special.h"
+#include <QtQml>
 
 int main(int argc, char *argv[])
 {
