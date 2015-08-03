@@ -20,3 +20,10 @@ HEADERS += \
     qftp.h \
     qurlinfo.h \
     simplythebestftp.h
+
+DISTFILES += \
+    icons/Disconnect.ico \
+    icons/document.ico \
+    icons/left.ico \
+    icons/network.ico \
+    icons/right.ico

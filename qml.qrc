@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>connect-icon.png</file>
+        <file>icons/Disconnect.ico</file>
     </qresource>
 </RCC>

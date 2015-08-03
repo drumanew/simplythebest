@@ -20,6 +20,8 @@ ApplicationWindow {
     color: "#edd2a4"
     opacity: 1
     Rectangle {
+        x: 0
+        y: -7
         width: 800
         height: 640
         visible: true
@@ -34,15 +36,7 @@ ApplicationWindow {
                 color: "#96d76c"
             }
         }
-/*
-    Row {
-        id: row1
-        x: 135
-        y: 179
-        width: 250
-        height: 400
-    }
-*/
+
     ListView {
         id: clientFiles
         objectName: "clientFiles"
@@ -53,7 +47,7 @@ ApplicationWindow {
 
         FolderListModel {
             id: folderModel
-            folder: "file:///home/mkhotko"
+            folder: "file:///"
             showDirs: true
             showDotAndDotDot: true
         }
@@ -196,7 +190,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 2
-//            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cnetwork.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cnetwork.ico"
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
@@ -220,7 +214,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdisconnect.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdisconnect.ico"
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
@@ -236,8 +230,9 @@ ApplicationWindow {
             y: -6
             width: 64
             height: 64
+            z: 4
             anchors.horizontalCenterOffset: 1
-         //   source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdocument.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Image{
@@ -245,19 +240,20 @@ ApplicationWindow {
             y: 11
             width: 32
             height: 32
+            z: 5
             anchors.horizontalCenterOffset: 1
-          //  source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cright.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cright.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         id: upload
         x: 401
-        y: 295
+        y: 304
         width: 66
         height: 51
         color: "#00000000"
 
-        z: 1
+        z: 4
     }
 
     Rectangle {
@@ -268,7 +264,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-         //   source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdocument.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Image{
@@ -277,7 +273,7 @@ ApplicationWindow {
             width: 32
             height: 32
             anchors.horizontalCenterOffset: 1
-        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cleft.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cleft.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -299,7 +295,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: -546
-        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cfolder.ico"
+            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cfolder.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -341,7 +337,7 @@ ApplicationWindow {
     Label {
         id: label7
         x: 404
-        y: 271
+        y: 280
         text: qsTr("Upload")
         font.italic: false
         font.pointSize: 12
