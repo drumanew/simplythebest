@@ -2,7 +2,11 @@ TEMPLATE = app
 
 QT += qml quick widgets gui
 
-SOURCES += main.cpp
+SOURCES += \
+    main.cpp \
+    qftp.cpp \
+    qurlinfo.cpp \
+    simplythebestftp.cpp
 
 RESOURCES += qml.qrc
 
@@ -12,4 +16,7 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
-HEADERS +=
+HEADERS += \
+    qftp.h \
+    qurlinfo.h \
+    simplythebestftp.h

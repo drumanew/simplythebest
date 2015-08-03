@@ -2,9 +2,11 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
+import QtQuick.Controls.Styles 1.4
 
 ApplicationWindow {
-    id: applicationWindow1
+    id: mainWindow
+    objectName: "mainWindow"
     title: qsTr("simplythebest FTP client")
     width: 800
     height: 640
@@ -26,8 +28,6 @@ ApplicationWindow {
                 color: "#96d76c"
             }
         }
-
-
 
     Row {
         id: row1
@@ -56,18 +56,34 @@ ApplicationWindow {
         font.family: "Courier"
     }
 
-    TextEdit {
-        id: textEdit1
+    TextField {
+        id: serverName
+        objectName: "serverName"
         x: 135
         y: 28
         width: 413
         height: 25
-        text: qsTr("Text Edit")
+        text: "ftp.plgn.ru"
         z: 2
-        textFormat: Text.RichText
         font.bold: true
         font.family: "Courier"
         font.pointSize: 12
+        style: TextFieldStyle {
+            background:
+                Rectangle {
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0
+                            color: "#c7f4ab"
+                        }
+                        GradientStop {
+                            position: 1
+                            color: "#a1e476"
+                        }
+                    }
+                }
+        }
+
     }
 
     Label {
@@ -109,48 +125,6 @@ ApplicationWindow {
         font.pointSize: 12
     }
 
-    /*ToolButton {
-        id: toolButton1
-        x: 590
-        y: 33
-        width: 33
-        height: 34
-        text: "Connect"
-        isDefault: true
-        transformOrigin: Item.Center
-        clip: true
-        tooltip: "Connect to server"
-        checkable: false
-        scale: 2
-        iconSource: "file:///C:%5CUsers%5CМихаил%5CDownloads%5Cnetwork.ico"
-    }*/
-
-    /*ToolButton {
-        id: toolButton2
-        x: 726
-        y: 31
-        width: 36
-        height: 34
-        smooth: false
-        tooltip: "Disconnect"
-        checkable: false
-        scale: 2
-        clip: true
-        iconSource: "file:///C:%5CUsers%5CМихаил%5CDownloads%5Cdisconnect.png"
-    }*/
-
-    /*ToolButton {
-        id: toolButton3
-        x: 420
-        y: 237
-    }
-
-    ToolButton {
-        id: toolButton4
-        x: 420
-        y: 305
-    }*/
-
     Rectangle {
 
         Image{
@@ -159,7 +133,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 2
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cnetwork.ico"
+//            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cnetwork.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -180,7 +154,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdisconnect.ico"
+        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdisconnect.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -202,7 +176,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
+         //   source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Image{
@@ -211,7 +185,7 @@ ApplicationWindow {
             width: 32
             height: 32
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cright.ico"
+          //  source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cright.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -233,7 +207,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
+         //   source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdocument.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Image{
@@ -242,7 +216,7 @@ ApplicationWindow {
             width: 32
             height: 32
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cleft.ico"
+        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cleft.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -257,25 +231,6 @@ ApplicationWindow {
     }
 
     Rectangle {
-        id: fotTheTextEdit
-        x: 135
-        y: 28
-        width: 427
-        height: 25
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#c7f4ab"
-            }
-
-            GradientStop {
-                position: 1
-                color: "#a1e476"
-            }
-        }
-    }
-
-    Rectangle {
 
         Image{
             id: opensysfilesIcon
@@ -283,7 +238,7 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: -546
-            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cfolder.ico"
+        //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cfolder.ico"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
