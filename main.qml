@@ -3,8 +3,14 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.4
+import Qt.labs.folderlistmodel 2.1
 
 ApplicationWindow {
+    signal connectToServer(string server)
+    signal disconnectFromServer()
+
+    property alias serverNameText: serverName.text
+
     id: mainWindow
     objectName: "mainWindow"
     title: qsTr("simplythebest FTP client")
@@ -28,13 +34,64 @@ ApplicationWindow {
                 color: "#96d76c"
             }
         }
-
+/*
     Row {
         id: row1
         x: 135
         y: 179
         width: 250
         height: 400
+    }
+*/
+    ListView {
+        id: clientFiles
+        objectName: "clientFiles"
+        x: 135
+        y: 179
+        width: 250
+        height: 400
+
+        FolderListModel {
+            id: folderModel
+            folder: "file:///home/mkhotko"
+            showDirs: true
+            showDotAndDotDot: true
+        }
+        Component {
+            id: fileDelegate
+
+            Rectangle {
+                width: 250
+                height: 25
+                radius: 5
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: clientFiles.currentIndex === index ? "#c7f4ab" : "#ccccff"
+                    }
+                    GradientStop {
+                        position: 1
+                        color: clientFiles.currentIndex === index ? "#a1e476" : "#afdafc"
+                    }
+                }
+
+                Text {
+                    x: 25
+                    width: 215
+                    text: fileName
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        clientFiles.currentIndex = index
+                    }
+                }
+
+            }
+        }
+
+        model: folderModel
+        delegate: fileDelegate
     }
 
     Row {
@@ -126,7 +183,13 @@ ApplicationWindow {
     }
 
     Rectangle {
-
+        id: connect
+        x: 592
+        y: 15
+        width: 64
+        height: 51
+        color: "#00000000"
+        z: 1
         Image{
             id: connectIcon
             y: -6
@@ -135,19 +198,22 @@ ApplicationWindow {
             anchors.horizontalCenterOffset: 2
 //            source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cnetwork.ico"
             anchors.horizontalCenter: parent.horizontalCenter
+            MouseArea {
+                anchors.fill: parent
+                onClicked: mainWindow.connectToServer(serverNameText)
+            }
         }
 
-        id: connect
-        x: 592
+    }
+
+    Rectangle {
+        id: disconnect
+        x: 695
         y: 15
-        width: 64
+        width: 66
         height: 51
         color: "#00000000"
-
         z: 1
-    }
-    Rectangle {
-
         Image{
             id: disconnectIcon
             y: -6
@@ -156,16 +222,11 @@ ApplicationWindow {
             anchors.horizontalCenterOffset: 1
         //    source: "file:///C:%5CQt Projects%5Cbuild-simplythebest-Desktop_Qt_5_5_0_MinGW_32bit-Debug%5Cicons%5Cdisconnect.ico"
             anchors.horizontalCenter: parent.horizontalCenter
+            MouseArea {
+                anchors.fill: parent
+                onClicked: mainWindow.disconnectFromServer()
+            }
         }
-
-        id: disconnect
-        x: 695
-        y: 15
-        width: 66
-        height: 51
-        color: "#00000000"
-
-        z: 1
     }
 
     Rectangle {

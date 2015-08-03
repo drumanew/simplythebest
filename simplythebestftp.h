@@ -2,7 +2,6 @@
 #define SIMPLYTHEBESTFTP_H
 #include <QObject>
 #include "qftp.h"
-//#include <QQmlApplicationEngine>
 #include <QtQml>
 
 class simplyTheBestFtp : public QFtp
@@ -13,6 +12,12 @@ public:
     simplyTheBestFtp(QObject* qmlForm);
 private:
     QObject *m_qmlForm;
+public slots:
+    void connectToServer(const QString &serverName);
+    void disconnectFromServer();
+
+    void processStateChanged(int);
+    void processListInfo(QUrlInfo);
 };
 
 #endif // SIMPLYTHEBESTFTP_H
