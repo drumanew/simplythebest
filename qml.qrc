@@ -15,5 +15,7 @@
         <file>icons/uploadDocumentOnHover.png</file>
         <file>icons/files.ico</file>
         <file>icons/kdedocumentopen.ico</file>
+        <file>icons/bg.jpg</file>
+        <file>icons/bg2.jpg</file>
     </qresource>
 </RCC>

@@ -26,15 +26,19 @@ ApplicationWindow {
     visible: true
     color: "#edd2a4"
     opacity: 1
-
-    Rectangle {
+    GridView
+    {
         width: 800
         height: 640
         visible: true
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#edd2a4" }
-            GradientStop { position: 0.997; color: "#96d76c" }
-        }
+
+        Image{
+            id: background
+            source: "icons/bg2.jpg"
+
+             }
+    }
+
         ListView {
             id: clientFiles
             objectName: "clientFiles"
@@ -93,6 +97,7 @@ ApplicationWindow {
                                 color: "#a1e476"
                             }
                         }
+                        radius: 5
                     }
             }
 
@@ -290,7 +295,7 @@ ApplicationWindow {
             font.family: "Courier"
         }
 
-    }
+
 
     FolderListModel {
         id: folderModel
@@ -313,11 +318,11 @@ ApplicationWindow {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#edd2a4"
+                    color: "#ffe78f"
                 }
                 GradientStop {
                     position: 1
-                    color: clientFiles.currentIndex === index ? "#a1e476" : "#ffa474"
+                    color: clientFiles.currentIndex === index ? "#a1e476" : "#f2dc61"
                 }
             }
             Text { id: isDirClientText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
@@ -347,11 +352,11 @@ ApplicationWindow {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#edd2a4"
+                    color: "#ffe78f"
                 }
                 GradientStop {
                     position: 1
-                    color: serverFiles.currentIndex === index ? "#a1e476" : "#ffa474"
+                    color: serverFiles.currentIndex === index ? "#a1e476" : "#f2dc61"
                 }
             }
             Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
