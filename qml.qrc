@@ -1,6 +1,19 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>connect-icon.png</file>
+        <file>icons/disconnect.png</file>
+        <file>icons/disconnectOnClick.png</file>
+        <file>icons/disconnectOnHover.png</file>
+        <file>icons/network.png</file>
+        <file>icons/networkOnClick.png</file>
+        <file>icons/networkOnHover.png</file>
+        <file>icons/downloadDocument.png</file>
+        <file>icons/downloadDocumentOnClick.png</file>
+        <file>icons/downloadDocumentOnHover.png</file>
+        <file>icons/uploadDocument.png</file>
+        <file>icons/uploadDocumentOnClick.png</file>
+        <file>icons/uploadDocumentOnHover.png</file>
+        <file>icons/files.ico</file>
+        <file>icons/kdedocumentopen.ico</file>
     </qresource>
 </RCC>
