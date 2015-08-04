@@ -19,11 +19,12 @@ ApplicationWindow {
     visible: true
     color: "#edd2a4"
     opacity: 1
-    Rectangle {
+    GridView
+    {
         width: 800
         height: 640
         visible: true
-        gradient: Gradient {
+        /*gradient: Gradient {
             GradientStop {
                 position: 0
                 color: "#edd2a4"
@@ -33,59 +34,83 @@ ApplicationWindow {
                 position: 0.997
                 color: "#96d76c"
             }
-        }
+        }*/
+        Image{
+            id: background
+            source: "icons/bg2.jpg"
 
-    ListView {
+             }
+    }
+
+
+    ListView
+    {
         id: clientFiles
         objectName: "clientFiles"
         x: 135
-        y: 179
+        y: 172
         width: 250
         height: 400
         cacheBuffer: 319
 
-        FolderListModel {
+        FolderListModel
+        {
             id: folderModel
             folder: "file:///MyGames"
             showDirs: true
             showDotAndDotDot: true
         }
-        Component {
+
+        Component
+        {
             id: fileDelegate
 
-            Rectangle {
+
+            Rectangle
+            {
                 width: 250
                 height: 25
                 radius: 5
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#edd2a4"
-                    }
-                    GradientStop {
-                        position: 1
-                        color: clientFiles.currentIndex === index ? "#a1e476" : "#ffa474"
-                    }
-                }
+                gradient: Gradient
 
-                Text {
+                {
+                    GradientStop
+                    {
+                        position: 0
+                        color: "#ffe78f"
+                    }
+                    GradientStop
+                    {
+                        position: 1
+                        color: clientFiles.currentIndex === index ? "#a1e476" : "#f2dc61"
+                    }
+                 }
+
+
+             Text
+             {
                     x: 25
                     width: 215
                     text: fileName
-                }
-                MouseArea {
+             }
+
+             MouseArea
+             {
                     anchors.fill: parent
-                    onClicked: {
+                    onClicked:
+                    {
                         clientFiles.currentIndex = index
                     }
-                }
+             }
 
             }
-        }
 
-        model: folderModel
-        delegate: fileDelegate
+
     }
+    model: folderModel
+    delegate: fileDelegate
+    }
+
 
     Row {
         id: row2
@@ -104,12 +129,7 @@ ApplicationWindow {
         font.bold: true
         font.pointSize: 12
         font.family: "Courier"
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered:
-                parent.color = red
-        }
+
     }
 
     TextField {
@@ -318,7 +338,8 @@ ApplicationWindow {
         font.italic: false
         font.bold: true
     }
-    Label {
+    Label
+    {
         id: label6
         x: 680
         y: 72
@@ -330,7 +351,8 @@ ApplicationWindow {
         font.bold: true
     }
 
-    Label {
+    Label
+    {
         id: label7
         x: 404
         y: 271
@@ -342,7 +364,8 @@ ApplicationWindow {
         font.family: "Courier"
     }
 
-    Label {
+    Label
+    {
         id: label8
         x: 394
         y: 457
@@ -357,4 +380,4 @@ ApplicationWindow {
 }
 
 
-}
+
