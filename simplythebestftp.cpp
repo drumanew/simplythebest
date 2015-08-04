@@ -7,6 +7,7 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
     connect(this->m_qmlForm, SIGNAL(connectToServer(QString)), this, SLOT(connectToServer(QString)));
     connect(this->m_qmlForm, SIGNAL(disconnectFromServer()), this, SLOT(disconnectFromServer()));
     connect(this->m_qmlForm, SIGNAL(cdDir(QString)), this, SLOT(cdDir(QString)));
+    connect(this->m_qmlForm, SIGNAL(download(QString)), this, SLOT(download(QString)));
 
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(processStateChanged(int)));
     connect(this, SIGNAL(listInfo(QUrlInfo)), this, SLOT(processListInfo(QUrlInfo)));
@@ -44,6 +45,10 @@ void simplyTheBestFtp::disconnectFromServer() {
 void simplyTheBestFtp::cdDir(const QString &dir) {
     qDebug() << "cd " + dir;
     this->cdCmdId = this->cd(dir);
+}
+
+void simplyTheBestFtp::download(const QString &file) {
+    qDebug() << "get " + file;
 }
 
 void simplyTheBestFtp::processCommandFinished(int cmd, bool error) {

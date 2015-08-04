@@ -15,10 +15,12 @@ private:
     QObject *m_qmlForm;
     QList<QUrlInfo> serverFiles;
     int cdCmdId;
+    int downloadCmdId;
 public slots:
     void connectToServer(const QString &serverName);
     void disconnectFromServer();
     void cdDir(const QString &dir);
+    void download(const QString &file);
 
     void processStateChanged(int);
     void processListInfo(QUrlInfo);

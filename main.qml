@@ -9,6 +9,7 @@ ApplicationWindow {
     signal connectToServer(string server)
     signal disconnectFromServer()
     signal cdDir(string dir)
+    signal download(string file)
 
     function addServerFile(name, isDir) {
         serverFilesListModel.append({ fileName: name, fileIsDir: isDir })
@@ -222,9 +223,7 @@ ApplicationWindow {
             width: 66
             height: 51
             color: "#00000000"
-
             z: 1
-
             Image{
                 id: downloadIcon
                 y: -6
@@ -236,16 +235,15 @@ ApplicationWindow {
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered:
-                        parent.source = "icons/downloadDocumentOnHover.png"
+                    onEntered: parent.source = "icons/downloadDocumentOnHover.png"
                     onClicked: {
                         parent.source = "icons/downloadDocumentOnClick.png"
+                        var file = serverFiles.currentItem.children[1].text;
+                        mainWindow.download(file);
                     }
                     onExited: parent.source = "icons/downloadDocument.png"
+                }
             }
-            }
-
-
         }
         Label {
             id: label5
@@ -322,8 +320,8 @@ ApplicationWindow {
                     color: clientFiles.currentIndex === index ? "#a1e476" : "#ffa474"
                 }
             }
-            Text { x: 0; width:25; text: fileIsDir ? "d" : "f" }
-            Text { x: 25; width: 215; text: fileName }
+            Text { id: isDirClientText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
+            Text { id: nameClientText; x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -342,6 +340,7 @@ ApplicationWindow {
     Component {
         id: serverFileDelegate
         Rectangle {
+            id: bodyRect
             width: 250
             height: 25
             radius: 5
@@ -355,8 +354,8 @@ ApplicationWindow {
                     color: serverFiles.currentIndex === index ? "#a1e476" : "#ffa474"
                 }
             }
-            Text { x: 0; width:25; text: fileIsDir ? "d" : "f" }
-            Text { x: 25; width: 215; text: fileName }
+            Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
+            Text { id: nameServerText; x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
