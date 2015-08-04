@@ -10,15 +10,19 @@ class simplyTheBestFtp : public QFtp
 
 public:
     simplyTheBestFtp(QObject* qmlForm);
+    void listAll();
 private:
     QObject *m_qmlForm;
     QList<QUrlInfo> serverFiles;
+    int cdCmdId;
 public slots:
     void connectToServer(const QString &serverName);
     void disconnectFromServer();
+    void cdDir(const QString &dir);
 
     void processStateChanged(int);
     void processListInfo(QUrlInfo);
+    void processCommandFinished(int, bool);
 };
 
 #endif // SIMPLYTHEBESTFTP_H

@@ -6,45 +6,83 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
 
     connect(this->m_qmlForm, SIGNAL(connectToServer(QString)), this, SLOT(connectToServer(QString)));
     connect(this->m_qmlForm, SIGNAL(disconnectFromServer()), this, SLOT(disconnectFromServer()));
+    connect(this->m_qmlForm, SIGNAL(cdDir(QString)), this, SLOT(cdDir(QString)));
 
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(processStateChanged(int)));
     connect(this, SIGNAL(listInfo(QUrlInfo)), this, SLOT(processListInfo(QUrlInfo)));
+    connect(this, SIGNAL(commandFinished(int,bool)), this, SLOT(processCommandFinished(int,bool)));
 }
 
-void simplyTheBestFtp::connectToServer(const QString &serverName) {
-    qDebug() << "Connect to: " + serverName;
-    this->connectToHost(serverName);
-    this->login();
+void simplyTheBestFtp::listAll() {
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(this->m_qmlForm, "addServerFile",
+                              Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, "."),
+                              Q_ARG(QVariant, true));
+    QMetaObject::invokeMethod(this->m_qmlForm, "addServerFile",
+                              Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, ".."),
+                              Q_ARG(QVariant, true));
     this->list();
 }
 
+void simplyTheBestFtp::connectToServer(const QString &serverName) {
+    if (this->state() == QFtp::Unconnected) {
+        this->connectToHost(serverName);
+        this->login();
+        this->listAll();
+    }
+}
+
 void simplyTheBestFtp::disconnectFromServer() {
-    qDebug() << "Disconnected";
+    if (this->state() != QFtp::Unconnected) {
+        this->serverFiles.clear();
+        this->close();
+    }
+}
+
+void simplyTheBestFtp::cdDir(const QString &dir) {
+    qDebug() << "cd " + dir;
+    this->cdCmdId = this->cd(dir);
+}
+
+void simplyTheBestFtp::processCommandFinished(int cmd, bool error) {
+    if (this->cdCmdId == cmd) {
+        if (!error) {
+            this->listAll();
+        } else {
+            qDebug() << "CD: error";
+        }
+    }
 }
 
 void simplyTheBestFtp::processStateChanged(int state) {
+    QString strState = "";
+
     switch (state) {
     case QFtp::Unconnected:
-        qDebug() << "FTP: Unconnected...";
+        strState = "Unconnected.";
         break;
     case QFtp::HostLookup:
-        qDebug() << "FTP: Host lookup...";
+        strState = "Host lookup...";
         break;
     case QFtp::Connecting:
-        qDebug() << "FTP: Connecting...";
+        strState = "Connecting...";
         break;
     case QFtp::Connected:
-        qDebug() << "FTP: Connected...";
+        strState = "Connected.";
         break;
     case QFtp::LoggedIn:
-        qDebug() << "FTP: Logged in...";
+        strState = "Logged in.";
         break;
     case QFtp::Closing:
-        qDebug() << "FTP: Closing...";
+        strState = "Closing...";
         break;
     default:
         break;
-    }
+    };
+
+    this->m_qmlForm->setProperty("state", strState);
 }
 
 void simplyTheBestFtp::processListInfo(QUrlInfo entry) {
@@ -54,5 +92,6 @@ void simplyTheBestFtp::processListInfo(QUrlInfo entry) {
     QVariant returnedValue;
     QMetaObject::invokeMethod(this->m_qmlForm, "addServerFile",
                               Q_RETURN_ARG(QVariant, returnedValue),
-                              Q_ARG(QVariant, entry.name()));
+                              Q_ARG(QVariant, entry.name()),
+                              Q_ARG(QVariant, entry.isDir()));
 }

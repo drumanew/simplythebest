@@ -8,11 +8,14 @@ import Qt.labs.folderlistmodel 2.1
 ApplicationWindow {
     signal connectToServer(string server)
     signal disconnectFromServer()
-    function addServerFile(name) {
-        serverFilesListModel.append({ fileName: name })
+    signal cdDir(string dir)
+
+    function addServerFile(name, isDir) {
+        serverFilesListModel.append({ fileName: name, fileIsDir: isDir })
     }
 
     property alias serverNameText: serverName.text
+    property alias state: statusLabel.text
 
     id: mainWindow
     objectName: "mainWindow"
@@ -63,11 +66,6 @@ ApplicationWindow {
             font.bold: true
             font.pointSize: 12
             font.family: "Courier"
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: parent.color = red
-            }
         }
         TextField {
             id: serverName
@@ -99,12 +97,12 @@ ApplicationWindow {
 
         }
         Label {
-            id: label2
+            id: statusLabel
             x: 135
             y: 83
             width: 427
             height: 25
-            text: qsTr("Label")
+            text: qsTr("Unconnected.")
             font.bold: true
             font.family: "Courier"
             font.pointSize: 12
@@ -186,6 +184,7 @@ ApplicationWindow {
                     onClicked: {
                         parent.source = "icons/disconnectOnClick.png"
                         mainWindow.disconnectFromServer()
+                        serverFilesListModel.clear()
                     }
                     onExited: parent.source = "icons/disconnect.png"
                 }
@@ -302,6 +301,11 @@ ApplicationWindow {
         showDotAndDotDot: true
     }
 
+    ListModel {
+        id: serverFilesListModel
+        objectName: "serverFilesListModel"
+    }
+
     Component {
         id: clientFileDelegate
         Rectangle {
@@ -318,15 +322,17 @@ ApplicationWindow {
                     color: clientFiles.currentIndex === index ? "#a1e476" : "#ffa474"
                 }
             }
-            Text {
-                x: 25
-                width: 215
-                text: fileName
-            }
+            Text { x: 0; width:25; text: fileIsDir ? "d" : "f" }
+            Text { x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     clientFiles.currentIndex = index
+                }
+                onDoubleClicked: {
+                    if (fileIsDir) {
+                        folderModel.folder = fileURL
+                    }
                 }
             }
 
@@ -349,23 +355,22 @@ ApplicationWindow {
                     color: serverFiles.currentIndex === index ? "#a1e476" : "#ffa474"
                 }
             }
-            Text {
-                x: 25
-                width: 215
-                text: fileName
-            }
+            Text { x: 0; width:25; text: fileIsDir ? "d" : "f" }
+            Text { x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     serverFiles.currentIndex = index
                 }
+                onDoubleClicked: {
+                    var name = fileName;
+                    if (fileIsDir) {
+                        serverFilesListModel.clear();
+                        mainWindow.cdDir(name);
+                    }
+                }
             }
 
         }
-    }
-
-    ListModel {
-        id: serverFilesListModel
-        objectName: "serverFilesListModel"
     }
 }
