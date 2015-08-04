@@ -20,8 +20,6 @@ ApplicationWindow {
     color: "#edd2a4"
     opacity: 1
     Rectangle {
-        x: 0
-        y: -7
         width: 800
         height: 640
         visible: true
@@ -44,10 +42,11 @@ ApplicationWindow {
         y: 179
         width: 250
         height: 400
+        cacheBuffer: 319
 
         FolderListModel {
             id: folderModel
-            folder: "file:///"
+            folder: "file:///MyGames"
             showDirs: true
             showDotAndDotDot: true
         }
@@ -61,11 +60,11 @@ ApplicationWindow {
                 gradient: Gradient {
                     GradientStop {
                         position: 0
-                        color: clientFiles.currentIndex === index ? "#c7f4ab" : "#ccccff"
+                        color: "#edd2a4"
                     }
                     GradientStop {
                         position: 1
-                        color: clientFiles.currentIndex === index ? "#a1e476" : "#afdafc"
+                        color: clientFiles.currentIndex === index ? "#a1e476" : "#ffa474"
                     }
                 }
 
@@ -105,6 +104,12 @@ ApplicationWindow {
         font.bold: true
         font.pointSize: 12
         font.family: "Courier"
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered:
+                parent.color = red
+        }
     }
 
     TextField {
@@ -190,11 +195,18 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 2
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cnetwork.ico"
+            source: "icons/network.png"
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
-                onClicked: mainWindow.connectToServer(serverNameText)
+                hoverEnabled: true
+                onEntered:
+                    parent.source = "icons/networkOnHover.png"
+                onClicked: {
+                    mainWindow.connectToServer(serverNameText);
+                    parent.source = "icons/networkOnClick.png"
+                }
+                onExited: parent.source = "icons/network.png"
             }
         }
 
@@ -214,69 +226,52 @@ ApplicationWindow {
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdisconnect.ico"
+            source: "icons/disconnect.png"
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
-                onClicked: mainWindow.disconnectFromServer()
+                hoverEnabled: true
+                onEntered:
+                    parent.source = "icons/disconnectOnHover.png"
+                onClicked: {
+                    parent.source = "icons/disconnectOnClick.png"
+                    mainWindow.disconnectFromServer()
+                }
+                onExited: parent.source = "icons/disconnect.png"
             }
         }
     }
 
     Rectangle {
-
-        Image{
-            id: documentIcon1
-            y: -6
-            width: 64
-            height: 64
-            z: 4
-            anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdocument.ico"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-        Image{
-            id: uploadIcon
-            y: 11
-            width: 32
-            height: 32
-            z: 5
-            anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cright.ico"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
         id: upload
         x: 401
-        y: 304
+        y: 295
         width: 66
         height: 51
         color: "#00000000"
-
-        z: 4
-    }
-
-    Rectangle {
-
+        z: 1
         Image{
-            id: documentIcon
+            id: uploadIcon
             y: -6
             width: 64
             height: 64
             anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cdocument.ico"
+            source: "icons/uploadDocument.png"
             anchors.horizontalCenter: parent.horizontalCenter
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered:
+                    parent.source = "icons/uploadDocumentOnHover.png"
+                onClicked: {
+                    parent.source = "icons/uploadDocumentOnClick.png"
+                }
+                onExited: parent.source = "icons/uploadDocument.png"
         }
-        Image{
-            id: downloadIcon
-            y: 11
-            width: 32
-            height: 32
-            anchors.horizontalCenterOffset: 1
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cleft.ico"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+    }
+    }
 
+    Rectangle {
         id: download
         x: 401
         y: 400
@@ -285,29 +280,30 @@ ApplicationWindow {
         color: "#00000000"
 
         z: 1
-    }
-
-    Rectangle {
 
         Image{
-            id: opensysfilesIcon
-            y: -518
+            id: downloadIcon
+            y: -6
             width: 64
             height: 64
-            anchors.horizontalCenterOffset: -546
-            source: "file:///C:%5CQt Projects%5Csimplythebest%5Cicons%5Cfolder.ico"
+            anchors.horizontalCenterOffset: 1
+            source: "icons/downloadDocument.png"
             anchors.horizontalCenter: parent.horizontalCenter
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered:
+                    parent.source = "icons/downloadDocumentOnHover.png"
+                onClicked: {
+                    parent.source = "icons/downloadDocumentOnClick.png"
+                }
+                onExited: parent.source = "icons/downloadDocument.png"
+        }
         }
 
-        id: opensysfiles
-        x: 33
-        y: 179
-        width: 66
-        height: 51
-        color: "#00000000"
 
-        z: 1
     }
+
 
 
 
@@ -337,7 +333,7 @@ ApplicationWindow {
     Label {
         id: label7
         x: 404
-        y: 280
+        y: 271
         text: qsTr("Upload")
         font.italic: false
         font.pointSize: 12
