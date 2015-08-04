@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     if (!rootObject) {
         QMessageBox::information(0, "Debug", "Root Object not found");
     } else {
-        simplyTheBestFtp *ftp = new simplyTheBestFtp(rootObject);
+        new simplyTheBestFtp(rootObject);
     }
 
     return app.exec();

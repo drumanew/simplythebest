@@ -294,7 +294,7 @@ ApplicationWindow {
 
     FolderListModel {
         id: folderModel
-        folder: "/home/mkhotko"
+        folder: "file:///"
         showDirs: true
         showDotAndDotDot: true
     }
