@@ -159,6 +159,7 @@ ApplicationWindow {
                     hoverEnabled: true
                     onEntered: parent.source = "icons/networkOnHover.png"
                     onClicked: {
+                        serverFilesListModel.clear();
                         mainWindow.connectToServer(serverNameText);
                         parent.source = "icons/networkOnClick.png"
                     }
@@ -299,9 +300,12 @@ ApplicationWindow {
 
     FolderListModel {
         id: folderModel
-        folder: "file:///"
+        folder: Qt.platform.os === "linux" ? "/home/" : "file:///"
         showDirs: true
         showDotAndDotDot: true
+        Component.onCompleted: {
+            console.log(Qt.platform.os)
+        }
     }
 
     ListModel {
