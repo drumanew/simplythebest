@@ -50,4 +50,9 @@ void simplyTheBestFtp::processStateChanged(int state) {
 void simplyTheBestFtp::processListInfo(QUrlInfo entry) {
     QString entryType = (entry.isDir() ? "dir: " : "file ");
     qDebug() << "New entry: " + entryType + entry.name();
+    this->serverFiles.push_back(entry);
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(this->m_qmlForm, "addServerFile",
+                              Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, entry.name()));
 }

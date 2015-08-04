@@ -12,6 +12,7 @@ public:
     simplyTheBestFtp(QObject* qmlForm);
 private:
     QObject *m_qmlForm;
+    QList<QUrlInfo> serverFiles;
 public slots:
     void connectToServer(const QString &serverName);
     void disconnectFromServer();
