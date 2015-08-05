@@ -26,6 +26,7 @@ ApplicationWindow {
     visible: true
     color: "#edd2a4"
     opacity: 1
+
     GridView
     {
         width: 800
@@ -35,9 +36,157 @@ ApplicationWindow {
         Image{
             id: background
             source: "icons/bg2.jpg"
-
              }
     }
+            Rectangle {
+                id: rectangleup
+                x: 0
+                y: -30
+                width: 792
+                height: 100
+                radius: 10
+                opacity: 0.6
+                border.width: 1
+                border.color: "#000000"
+            }
+            Rectangle {
+                id: rectanglelog
+                x: 70
+                y: 70
+                width: 490
+                height: 33
+                opacity: 0.7
+                radius: 5
+                border.width: 1
+                border.color: "#000000"
+            }
+            Rectangle {
+                id: rectanglecon
+                x: 575
+                y: -30
+                width: 100
+                height: 122
+                opacity: 0.6
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: {
+                        parent.opacity = 1
+                    }
+                    onClicked: {
+                        serverFilesListModel.clear();
+                        mainWindow.connectToServer(serverNameText);
+                    }
+                    onExited: {
+                        parent.opacity = 0.6
+                    }
+                }
+            }
+            Rectangle {
+                id: rectanglediscon
+                x: 675
+                y: -30
+                width: 108
+                height: 122
+                opacity: 0.6
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: parent.opacity = 1
+                    onClicked: {
+
+                        mainWindow.disconnectFromServer()
+                        serverFilesListModel.clear()
+                    }
+
+                    onExited: parent.opacity = 0.6
+                }
+            }
+            Rectangle {
+                id: rectangleyourfiles
+                x: 122
+                y: 144
+                width: 289
+                height: 29
+                opacity: 0.9
+                radius: 10
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+            }
+
+            Rectangle {
+                id: rectangleserverfiles
+                x: 511
+                y: 144
+                width: 289
+                height: 29
+                opacity: 0.9
+                radius: 10
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+            }
+            Rectangle {
+                id: rectangleupload
+                x: 135
+                y: 270
+                width: 340
+                height: 85
+                opacity: 0.6
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered:
+                        parent.opacity = 1
+
+                    onExited: {
+                        parent.opacity = 0.6
+                    }
+                }
+            }
+            Rectangle {
+                id: rectangledownload
+                x: 418
+                y: 393
+                width: 382
+                height: 85
+                opacity: 0.6
+                color: "#808080"
+                border.width: 1
+                border.color: "#000000"
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered:
+                        parent.opacity = 1
+
+                    onExited: {
+                        parent.opacity = 0.6
+                    }
+                }
+            }
+            Rectangle {
+                id: rectangledown
+                x: 122
+                y: 144
+                width: 714
+                height: 472
+                color: "#ffffff"
+                radius: 10
+                opacity: 0.6
+                border.width: 1
+                border.color: "#000000"
+            }
 
         ListView {
             id: clientFiles
@@ -54,7 +203,7 @@ ApplicationWindow {
         ListView {
             id: serverFiles
             objectName: "serverFiles"
-            x: 481
+            x: 511
             y: 179
             width: 250
             height: 400
@@ -63,7 +212,7 @@ ApplicationWindow {
             delegate: serverFileDelegate
         }
         Label {
-            id: label1
+            id: ftpserverlab
             x: 11
             y: 28
             height: 25
@@ -104,19 +253,19 @@ ApplicationWindow {
         }
         Label {
             id: statusLabel
-            x: 135
-            y: 83
+            x: 100
+            y: 80
             width: 427
             height: 25
             text: qsTr("Unconnected.")
-            font.bold: true
-            font.family: "Courier"
-            font.pointSize: 12
+            font.family: "Arial"
+            font.italic: true
+            font.pointSize: 11
         }
         Label {
-            id: label3
+            id: yourfileslab
             x: 135
-            y: 133
+            y: 148
             width: 250
             height: 25
             text: qsTr("Your files")
@@ -127,9 +276,9 @@ ApplicationWindow {
             font.bold: true
         }
         Label {
-            id: label4
-            x: 481
-            y: 133
+            id: serverfileslab
+            x: 511
+            y: 148
             width: 250
             height: 25
             text: qsTr("Server files")
@@ -140,47 +289,53 @@ ApplicationWindow {
         }
         Rectangle {
             id: connect
-            x: 592
-            y: 15
-            width: 64
-            height: 51
+            x: 575
+            y: -30
+            width: 100
+            height: 122
             color: "#00000000"
-            z: 1
+
             Image{
                 id: connectIcon
-                y: -6
+                y: 40
                 width: 64
                 height: 64
+                opacity: 1
                 anchors.horizontalCenterOffset: 2
                 source: "icons/network.png"
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: parent.source = "icons/networkOnHover.png"
+                    onEntered:
+                        parent.source = "icons/networkOnHover.png"
                     onClicked: {
+                        parent.source = "icons/networkOnClick.png"
                         serverFilesListModel.clear();
                         mainWindow.connectToServer(serverNameText);
-                        parent.source = "icons/networkOnClick.png"
                     }
-                    onExited: parent.source = "icons/network.png"
+                    onExited:
+                        parent.source = "icons/network.png"
+
                 }
             }
+
 
         }
         Rectangle {
             id: disconnect
-            x: 695
-            y: 15
-            width: 66
-            height: 51
+            x: 675
+            y: -30
+            width: 108
+            height: 122
             color: "#00000000"
-            z: 1
             Image{
                 id: disconnectIcon
-                y: -6
+                y: 40
                 width: 64
                 height: 64
+                opacity: 1
                 anchors.horizontalCenterOffset: 1
                 source: "icons/disconnect.png"
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -199,7 +354,7 @@ ApplicationWindow {
         }
         Rectangle {
             id: upload
-            x: 401
+            x: 390
             y: 295
             width: 66
             height: 51
@@ -224,7 +379,7 @@ ApplicationWindow {
         }
         Rectangle {
             id: download
-            x: 401
+            x: 437
             y: 400
             width: 66
             height: 51
@@ -252,7 +407,7 @@ ApplicationWindow {
             }
         }
         Label {
-            id: label5
+            id: connectlab
             x: 592
             y: 72
             text: qsTr("Connect")
@@ -263,7 +418,7 @@ ApplicationWindow {
             font.bold: true
         }
         Label {
-            id: label6
+            id: disconnectlab
             x: 680
             y: 72
             text: qsTr("Disconnect")
@@ -274,8 +429,8 @@ ApplicationWindow {
             font.bold: true
         }
         Label {
-            id: label7
-            x: 404
+            id: uploadlab
+            x: 393
             y: 271
             text: qsTr("Upload")
             font.italic: false
@@ -285,8 +440,8 @@ ApplicationWindow {
             font.family: "Courier"
         }
         Label {
-            id: label8
-            x: 394
+            id: downloadlab
+            x: 422
             y: 457
             text: qsTr("Download")
             font.italic: false
@@ -329,8 +484,14 @@ ApplicationWindow {
                     color: clientFiles.currentIndex === index ? "#a1e476" : "#f2dc61"
                 }
             }
-            Text { id: isDirClientText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
-            Text { id: nameClientText; x: 25; width: 215; text: fileName }
+            Image{
+                id: filesIcon
+                x: 0;
+                width:25;
+                anchors.horizontalCenterOffset: 2;
+                source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
+            }
+            Text { id: nameClientText; x: 25; width: 215; text: " " + fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -363,7 +524,21 @@ ApplicationWindow {
                     color: serverFiles.currentIndex === index ? "#a1e476" : "#f2dc61"
                 }
             }
-            Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
+            Image{
+                id: filesIcon
+                x: 0;
+                width:25;
+                anchors.horizontalCenterOffset: 2;
+                source: fileIsDir ? parent.source : "icons/files.ico";
+            }
+            Image{
+                id: folderIcon
+                x: 0;
+                width:25;
+                anchors.horizontalCenterOffset: 2;
+                source: ! fileIsDir ? parent.source : "icons/kdedocumentopen.ico";
+            }
+            //Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
             Text { id: nameServerText; x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
