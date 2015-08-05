@@ -14,17 +14,21 @@ public:
 private:
     QObject *m_qmlForm;
     QList<QUrlInfo> serverFiles;
+    QFile *file;
+
+    int loginCmdId;
     int cdCmdId;
     int downloadCmdId;
 public slots:
     void connectToServer(const QString &serverName);
     void disconnectFromServer();
     void cdDir(const QString &dir);
-    void download(const QString &file);
+    void download(const QString &pwd, const QString &file);
 
     void processStateChanged(int);
     void processListInfo(QUrlInfo);
     void processCommandFinished(int, bool);
+    void processReadyRead();
 };
 
 #endif // SIMPLYTHEBESTFTP_H

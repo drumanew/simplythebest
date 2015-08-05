@@ -9,11 +9,16 @@ ApplicationWindow {
     signal connectToServer(string server)
     signal disconnectFromServer()
     signal cdDir(string dir)
-    signal download(string file)
+    signal download(string pwd, string file)
+
+    function clearServerFiles() {
+        serverFilesListModel.clear();
+    }
 
     function addServerFile(name, isDir) {
         serverFilesListModel.append({ fileName: name, fileIsDir: isDir })
     }
+
 
     property alias serverNameText: serverName.text
     property alias state: statusLabel.text
@@ -188,69 +193,67 @@ ApplicationWindow {
                 border.color: "#000000"
             }
 
-        ListView {
-            id: clientFiles
-            objectName: "clientFiles"
-            x: 135
-            y: 179
-            width: 250
-            height: 400
-            cacheBuffer: 319
-
-            model: folderModel
-            delegate: clientFileDelegate
-        }
-        ListView {
-            id: serverFiles
-            objectName: "serverFiles"
-            x: 511
-            y: 179
-            width: 250
-            height: 400
-            cacheBuffer: 319
-            model: serverFilesListModel
-            delegate: serverFileDelegate
-        }
-        Label {
-            id: ftpserverlab
-            x: 11
-            y: 28
-            height: 25
-            text: qsTr("FTP server:")
-            font.bold: true
-            font.pointSize: 12
-            font.family: "Courier"
-        }
-        TextField {
-            id: serverName
-            objectName: "serverName"
-            x: 135
-            y: 28
-            width: 413
-            height: 25
-            text: "ftp.plgn.ru"
-            z: 2
-            font.bold: true
-            font.family: "Courier"
-            font.pointSize: 12
-            style: TextFieldStyle {
-                background:
-                    Rectangle {
-                        gradient: Gradient {
-                            GradientStop {
-                                position: 0
-                                color: "#c7f4ab"
-                            }
-                            GradientStop {
-                                position: 1
-                                color: "#a1e476"
-                            }
+    ListView {
+        id: clientFiles
+        objectName: "clientFiles"
+        x: 135
+        y: 179
+        width: 250
+        height: 400
+        cacheBuffer: 319
+        model: folderModel
+        delegate: clientFileDelegate
+    }
+    ListView {
+        id: serverFiles
+        objectName: "serverFiles"
+        x: 511
+        y: 179
+        width: 250
+        height: 400
+        cacheBuffer: 319
+        model: serverFilesListModel
+        delegate: serverFileDelegate
+    }
+    Label {
+        id: ftpserverlab
+        x: 11
+        y: 28
+        height: 25
+        text: qsTr("FTP server:")
+        font.bold: true
+        font.pointSize: 12
+        font.family: "Courier"
+    }
+    TextField {
+        id: serverName
+        objectName: "serverName"
+        x: 135
+        y: 28
+        width: 413
+        height: 25
+        text: "ftp.plgn.ru"
+        z: 2
+        font.bold: true
+        font.family: "Courier"
+        font.pointSize: 12
+        style: TextFieldStyle {
+            background:
+                Rectangle {
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0
+                            color: "#c7f4ab"
                         }
-                        radius: 5
+                        GradientStop {
+                            position: 1
+                            color: "#a1e476"
+                        }
                     }
-            }
-
+                }
         }
+
+    }
         Label {
             id: statusLabel
             x: 100
@@ -317,11 +320,8 @@ ApplicationWindow {
                     }
                     onExited:
                         parent.source = "icons/network.png"
-
                 }
             }
-
-
         }
         Rectangle {
             id: disconnect
@@ -400,7 +400,8 @@ ApplicationWindow {
                     onClicked: {
                         parent.source = "icons/downloadDocumentOnClick.png"
                         var file = serverFiles.currentItem.children[1].text;
-                        mainWindow.download(file);
+                        var pwd = folderModel.folder;
+                        mainWindow.download(pwd, file);
                     }
                     onExited: parent.source = "icons/downloadDocument.png"
                 }
@@ -450,6 +451,7 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             font.family: "Courier"
         }
+
 
 
 
@@ -541,7 +543,6 @@ ApplicationWindow {
                 onDoubleClicked: {
                     var name = fileName;
                     if (fileIsDir) {
-                        serverFilesListModel.clear();
                         mainWindow.cdDir(name);
                     }
                 }
