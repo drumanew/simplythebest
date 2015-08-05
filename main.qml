@@ -529,14 +529,7 @@ ApplicationWindow {
                 x: 0;
                 width:25;
                 anchors.horizontalCenterOffset: 2;
-                source: fileIsDir ? parent.source : "icons/files.ico";
-            }
-            Image{
-                id: folderIcon
-                x: 0;
-                width:25;
-                anchors.horizontalCenterOffset: 2;
-                source: ! fileIsDir ? parent.source : "icons/kdedocumentopen.ico";
+                source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
             }
             //Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
             Text { id: nameServerText; x: 25; width: 215; text: fileName }
