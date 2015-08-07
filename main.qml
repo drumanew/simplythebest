@@ -19,6 +19,9 @@ ApplicationWindow {
         serverFilesListModel.append({ fileName: name, fileIsDir: isDir })
     }
 
+    function updateProgress(got, total) {
+        progressBar.value = got/total;
+    }
 
     property alias serverNameText: serverName.text
     property alias state: statusLabel.text
@@ -43,6 +46,13 @@ ApplicationWindow {
             source: "icons/bg2.jpg"
              }
     }
+
+            ProgressBar {
+                id: progressBar;
+                value: 0;
+                visible: true;
+            }
+
             Rectangle {
                 id: rectangleup
                 x: 0
@@ -315,7 +325,6 @@ ApplicationWindow {
                         parent.source = "icons/networkOnHover.png"
                     onClicked: {
                         parent.source = "icons/networkOnClick.png"
-                        serverFilesListModel.clear();
                         mainWindow.connectToServer(serverNameText);
                     }
                     onExited:
@@ -398,10 +407,13 @@ ApplicationWindow {
                     hoverEnabled: true
                     onEntered: parent.source = "icons/downloadDocumentOnHover.png"
                     onClicked: {
-                        parent.source = "icons/downloadDocumentOnClick.png"
-                        var file = serverFiles.currentItem.children[1].text;
+                        parent.source = "icons/downloadDocumentOnClick.png";
+                        var file = serverFilesListModel.get(serverFiles.currentIndex).fileName;
+                        var isDir = serverFilesListModel.get(serverFiles.currentIndex).fileIsDir;
                         var pwd = folderModel.folder;
-                        mainWindow.download(pwd, file);
+                        if (serverFilesListModel.count && !isDir) {
+                            mainWindow.download(pwd, file);
+                        }
                     }
                     onExited: parent.source = "icons/downloadDocument.png"
                 }
@@ -508,6 +520,7 @@ ApplicationWindow {
 
         }
     }
+
 
     Component {
         id: serverFileDelegate
