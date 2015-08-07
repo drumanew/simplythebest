@@ -3,6 +3,9 @@
 simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
 {
     this->m_qmlForm = qmlForm;
+    this->isDownloading = false;
+    this->got_bytes = 0;
+    this->total_bytes = 0;
 
     connect(this->m_qmlForm, SIGNAL(connectToServer(QString)), this, SLOT(connectToServer(QString)));
     connect(this->m_qmlForm, SIGNAL(disconnectFromServer()), this, SLOT(disconnectFromServer()));
@@ -16,6 +19,7 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
 }
 
 void simplyTheBestFtp::listAll() {
+    this->serverFiles.clear();
     if (this->state() == QFtp::LoggedIn) {
         QVariant returnedValue;
         QMetaObject::invokeMethod(this->m_qmlForm, "clearServerFiles",
@@ -41,25 +45,36 @@ void simplyTheBestFtp::connectToServer(const QString &serverName) {
 
 void simplyTheBestFtp::disconnectFromServer() {
     if (this->state() != QFtp::Unconnected) {
+        if (this->isDownloading && this->file.isOpen()) {
+            this->abortDownload();
+        }
         this->serverFiles.clear();
         this->close();
     }
 }
 
 void simplyTheBestFtp::cdDir(const QString &dir) {
-    qDebug() << "cd " + dir;
     this->cdCmdId = this->cd(dir);
 }
 
 void simplyTheBestFtp::download(const QString &pwd, const QString &fileName) {
     QString path = pwd.startsWith("file:///") ? pwd.right(pwd.length() - 7) : pwd;
-    qDebug() << "get " + fileName + " to " + path;
-    this->file = new QFile(path + "/" + fileName);
-    if (file->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+
+    if (this->isDownloading) {
+        qDebug() << "already in progress";
+        return;
+    }
+
+    file.setFileName(path + "/" + fileName);
+
+    if (this->file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        this->total_bytes = this->serverFiles[fileName].size();
+        this->got_bytes = 0;
+        this->updateDownloadProgress();
+        this->isDownloading = true;
         this->downloadCmdId = this->get(fileName);
     } else {
         qDebug() << "write failed";
-        this->file->deleteLater();
     }
 }
 
@@ -77,8 +92,11 @@ void simplyTheBestFtp::processCommandFinished(int cmd, bool error) {
             qDebug() << "login error";
         }
     } else if (this->downloadCmdId == cmd) {
-        this->file->close();
-        this->file->deleteLater();
+        if (!error) {
+            this->downloadFinished();
+        } else {
+            qDebug() << "get error";
+        }
     }
 }
 
@@ -113,8 +131,9 @@ void simplyTheBestFtp::processStateChanged(int state) {
 
 void simplyTheBestFtp::processListInfo(QUrlInfo entry) {
     QString entryType = (entry.isDir() ? "dir: " : "file ");
-    qDebug() << "New entry: " + entryType + entry.name();
-    this->serverFiles.push_back(entry);
+
+    this->serverFiles.insert(entry.name(), entry);
+
     QVariant returnedValue;
     QMetaObject::invokeMethod(this->m_qmlForm, "addServerFile",
                               Q_RETURN_ARG(QVariant, returnedValue),
@@ -123,5 +142,29 @@ void simplyTheBestFtp::processListInfo(QUrlInfo entry) {
 }
 
 void simplyTheBestFtp::processReadyRead() {
-    this->file->write(this->readAll());
+    this->got_bytes += this->file.write(this->readAll());
+    this->updateDownloadProgress();
+}
+
+void simplyTheBestFtp::updateDownloadProgress() {
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(this->m_qmlForm, "updateProgress",
+                              Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, this->got_bytes),
+                              Q_ARG(QVariant, this->total_bytes));
+}
+
+void simplyTheBestFtp::abortDownload() {
+    this->downloadFinished();
+    this->abort();
+}
+
+void simplyTheBestFtp::downloadFinished() {
+    if (this->file.isOpen()) {
+        this->file.close();
+    }
+    this->isDownloading = false;
+    this->got_bytes = 0;
+    this->total_bytes = 0;
+    this->updateDownloadProgress();
 }

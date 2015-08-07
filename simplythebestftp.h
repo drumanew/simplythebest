@@ -13,12 +13,22 @@ public:
     void listAll();
 private:
     QObject *m_qmlForm;
-    QList<QUrlInfo> serverFiles;
-    QFile *file;
+
+    QMap<QString, QUrlInfo> serverFiles;
+
+    QFile    file;
+    quint64  got_bytes;
+    quint64  total_bytes;
+    bool     isDownloading;
 
     int loginCmdId;
     int cdCmdId;
     int downloadCmdId;
+
+    void updateDownloadProgress();
+    void abortDownload();
+    void downloadFinished();
+
 public slots:
     void connectToServer(const QString &serverName);
     void disconnectFromServer();
