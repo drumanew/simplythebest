@@ -6,7 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import Qt.labs.folderlistmodel 2.1
 
 ApplicationWindow {
-    signal connectToServer(string server, string login, string password)
+    signal connectToServer(string server, string login, string password, string port)
     signal disconnectFromServer()
     signal cdDir(string dir)
     signal download(string pwd, string file)
@@ -25,11 +25,16 @@ ApplicationWindow {
 
     function log(msg) {
         logListModel.append({msgText: (new Date()).toLocaleString(locale, "dd.MM.yyyy hh.mm.ss") + ": " + msg})
-        //mainWindow.state += "\n" + (new Date()).toLocaleString(locale, "dd.MM.yyyy hh.mm.ss") + ": " + msg;
     }
 
     property alias serverNameText: serverName.text
     property var locale: Qt.locale()
+    property variant settings;
+    property bool settingsActive: false
+    property string port: "21";
+    property string username: "anonymous";
+    property string password: "";
+
 
     id: mainWindow
     objectName: "mainWindow"
@@ -103,6 +108,19 @@ ApplicationWindow {
                     onExited: {
                         parent.opacity = 0.6
                     }
+                    onClicked: {
+                        if (!settingsActive) {
+                            var component = Qt.createComponent("additionalSettings.qml");
+                            if( component.status !== Component.Ready )
+                            {
+                                if( component.status === Component.Error )
+                                    console.debug("Error:"+ component.errorString() );
+
+                            } else {
+                                var dlg = component.createObject( mainWindow );
+                            }
+                        }
+                    }
                 }
             }
             Label {
@@ -138,7 +156,6 @@ ApplicationWindow {
                     }
                     onClicked: {
                         serverFilesListModel.clear();
-                        mainWindow.connectToServer(serverNameText);
                     }
                     onExited: {
                         parent.opacity = 0.6
@@ -403,9 +420,7 @@ ApplicationWindow {
                         parent.source = "icons/networkOnHover.png"
                     onClicked: {
                         parent.source = "icons/networkOnClick.png"
-                        var login = "";
-                        var password = "";
-                        mainWindow.connectToServer(serverNameText, login, password);
+                        mainWindow.connectToServer(serverNameText, username, password, port);
                     }
                     onExited:
                         parent.source = "icons/network.png"

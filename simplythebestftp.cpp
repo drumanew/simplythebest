@@ -7,8 +7,9 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
     this->got_bytes = 0;
     this->total_bytes = 0;
     this->username = "anonymous";
+    this->port = 21;
 
-    connect(this->m_qmlForm, SIGNAL(connectToServer(QString, QString, QString)), this, SLOT(connectToServer(QString, QString, QString)));
+    connect(this->m_qmlForm, SIGNAL(connectToServer(QString, QString, QString, QString)), this, SLOT(connectToServer(QString, QString, QString, QString)));
     connect(this->m_qmlForm, SIGNAL(disconnectFromServer()), this, SLOT(disconnectFromServer()));
     connect(this->m_qmlForm, SIGNAL(cdDir(QString)), this, SLOT(cdDir(QString)));
     connect(this->m_qmlForm, SIGNAL(download(QString,QString)), this, SLOT(download(QString,QString)));
@@ -45,11 +46,14 @@ void simplyTheBestFtp::listAll() {
     }
 }
 
-void simplyTheBestFtp::connectToServer(const QString &serverName, const QString &login, const QString &password) {
+void simplyTheBestFtp::connectToServer(const QString &serverName, const QString &login, const QString &password, const QString &port) {
     if (this->state() == QFtp::Unconnected) {
+        //qDebug() << "superconnect: " + login + ":" + password + "@" + serverName + ":" + port;
         this->currentHost = serverName;
-        this->connectToHost(serverName);
-        this->loginCmdId = this->login(login, password);
+        this->username = login;
+        this->port = port.toInt();
+        this->connectToHost(serverName, port.toInt());
+        this->loginCmdId = this->login(this->username, password);
     }
 }
 

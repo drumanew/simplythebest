@@ -15,6 +15,13 @@ ApplicationWindow{
     color: "#edd2a4"
     opacity: 1
 
+Component.onCompleted: {
+    additionalSettings.show();
+    portnum.text = mainWindow.port;
+    loginname.text = mainWindow.username;
+    passwordname.text = mainWindow.password;
+}
+
 Label {
     id: port
     x: 10
@@ -25,7 +32,7 @@ Label {
     font.bold: true
     font.pointSize: 12
     font.family: "Courier"
-    horizontalAlignment: Text.AlignHLet
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
 }
 Label {
@@ -38,7 +45,7 @@ Label {
     font.bold: true
     font.pointSize: 12
     font.family: "Courier"
-    horizontalAlignment: Text.AlignHLeft
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
 }
 Label {
@@ -51,7 +58,7 @@ Label {
     font.bold: true
     font.pointSize: 12
     font.family: "Courier"
-    horizontalAlignment: Text.AlignHLeft
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
 }
 TextField {
@@ -61,6 +68,7 @@ TextField {
     y: port.y
     width: parent.width*0.95 - port.width
     height: port.height
+    text: "21"
     z: 2
     font.bold: true
     font.family: "Courier"
@@ -110,9 +118,15 @@ Rectangle {
         hoverEnabled: true
         onEntered:
             parent.opacity = 1
-
         onExited: {
             parent.opacity = 0.6
+        }
+        onClicked: {
+            mainWindow.username = loginname.text;
+            mainWindow.password = passwordname.text;
+            mainWindow.port = portnum.text;
+            mainWindow.settingsActive = false;
+            additionalSettings.close();
         }
     }
 }
