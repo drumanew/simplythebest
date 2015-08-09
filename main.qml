@@ -51,6 +51,16 @@ ApplicationWindow {
 
             ProgressBar {
                 id: progressBar;
+                x: rectangledown.x
+                y: rectangledown.y + rectangledown.height - 10
+                width: rectangledown.width
+                height: 10
+
+                ColorAnimation {
+                    from: "white"
+                    to: "#000029"
+                    duration: 200
+                }
                 value: 0;
                 visible: true;
             }
@@ -66,17 +76,6 @@ ApplicationWindow {
                 border.width: 0
                 border.color: "#000000"
             }
-            /*Rectangle {
-                id: rectanglelog
-                x: 70
-                y: 70
-                width: 490
-                height: 33
-                opacity: 0.7
-                radius: 5
-                border.width: 1
-                border.color: "#000000"
-            }*/
             Rectangle {
                 id: rectanglecon
                 x: serverName.x + serverName.width + parent.width*0.03125
@@ -197,7 +196,7 @@ ApplicationWindow {
                 x: mainWindow.width*0.1525
                 y: 100
                 width: parent.width
-                height: 385
+                height: mainWindow.height*0.6015625
                 color: "#ffffff"
                 radius: 10
                 opacity: 0.6
@@ -222,7 +221,7 @@ ApplicationWindow {
         x: rectangledown.x + 13
         y: rectangleyourfiles.y + 37
         width: 250
-        height: 310
+        height: mainWindow.height*0.484375
         cacheBuffer: 319
         model: folderModel
         delegate: clientFileDelegate
@@ -233,7 +232,7 @@ ApplicationWindow {
         x: rectangleserverfiles.x
         y: rectangleyourfiles.y + 37
         width: 250
-        height: 210
+        height: mainWindow.height*0.484375
         cacheBuffer: 319
         model: serverFilesListModel
         delegate: serverFileDelegate
@@ -316,7 +315,8 @@ ApplicationWindow {
             font.italic: false
             font.bold: true
             font.pointSize: 12
-            z:1
+            visible: true
+            z:2
         }
         Rectangle {
             id: connect
