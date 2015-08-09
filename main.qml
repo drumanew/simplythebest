@@ -70,12 +70,51 @@ ApplicationWindow {
                 x: 0
                 y: -30
                 width: parent.width*0.99
-                height: 100
+                height: 90
                 radius: 10
                 opacity: 0.6
                 border.width: 0
                 border.color: "#000000"
+
             }
+
+
+            Rectangle {
+                id: additionalset
+                x: 61
+                y: rectangleup.y + rectangleup.height
+                width: 240
+                height: 25
+                radius: 10
+                opacity: 0.6
+                border.width: 1
+                border.color: "#000000"
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered:
+                        parent.opacity = 1
+
+                    onExited: {
+                        parent.opacity = 0.6
+                    }
+                }
+            }
+            Label {
+                id: additionalsetlab
+                x: additionalset.x
+                y: additionalset.y
+                height: 25
+                width: 240
+                text: qsTr("Additional settings")
+                font.bold: true
+                font.pointSize: 12
+                font.family: "Courier"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+
+            }
+
             Rectangle {
                 id: rectanglecon
                 x: serverName.x + serverName.width + parent.width*0.03125
