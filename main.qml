@@ -110,6 +110,7 @@ ApplicationWindow {
                     }
                     onClicked: {
                         if (!settingsActive) {
+                            settingsActive = true;
                             var component = Qt.createComponent("additionalSettings.qml");
                             if( component.status !== Component.Ready )
                             {
