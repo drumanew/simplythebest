@@ -220,22 +220,24 @@ ApplicationWindow {
         objectName: "clientFiles"
         x: rectangledown.x + 13
         y: rectangleyourfiles.y + 37
-        width: 250
+        width: mainWindow.width*0.3125
         height: mainWindow.height*0.484375
         cacheBuffer: 319
         model: folderModel
         delegate: clientFileDelegate
+        clip: true
     }
     ListView {
         id: serverFiles
         objectName: "serverFiles"
         x: rectangleserverfiles.x
         y: rectangleyourfiles.y + 37
-        width: 250
+        width: mainWindow.width*0.3125
         height: mainWindow.height*0.484375
         cacheBuffer: 319
         model: serverFilesListModel
         delegate: serverFileDelegate
+        clip : true
     }
     Label {
         id: ftpserverlab
@@ -523,7 +525,7 @@ ApplicationWindow {
                 anchors.horizontalCenterOffset: 2;
                 source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
             }
-            Text { id: nameClientText; x: filesIcon.x + filesIcon.width; width: 215; text: " " + fileName }
+            Text { id: nameClientText; x: filesIcon.x + filesIcon.width; width: parent.width; text: " " + fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -565,7 +567,7 @@ ApplicationWindow {
                 source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
             }
 
-            Text { id: nameServerText; x: 25; width: 215; text: fileName }
+            Text { id: nameServerText; width: parent.width; x: 25; text: " " + fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
