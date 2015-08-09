@@ -17,5 +17,6 @@
         <file>icons/kdedocumentopen.ico</file>
         <file>icons/bg.jpg</file>
         <file>icons/bg2.jpg</file>
+        <file>icons/bg3.jpg</file>
     </qresource>
 </RCC>

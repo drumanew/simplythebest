@@ -37,13 +37,15 @@ ApplicationWindow {
 
     GridView
     {
-        width: 800
-        height: 640
+        width: parent.width
+        height: parent.height
         visible: true
 
         Image{
             id: background
-            source: "icons/bg2.jpg"
+            source: "icons/bg3.jpg"
+            width: parent.width
+            height: parent.height
              }
     }
 
@@ -57,14 +59,14 @@ ApplicationWindow {
                 id: rectangleup
                 x: 0
                 y: -30
-                width: 792
+                width: parent.width*0.99
                 height: 100
                 radius: 10
                 opacity: 0.6
-                border.width: 1
+                border.width: 0
                 border.color: "#000000"
             }
-            Rectangle {
+            /*Rectangle {
                 id: rectanglelog
                 x: 70
                 y: 70
@@ -74,10 +76,10 @@ ApplicationWindow {
                 radius: 5
                 border.width: 1
                 border.color: "#000000"
-            }
+            }*/
             Rectangle {
                 id: rectanglecon
-                x: 575
+                x: serverName.x + serverName.width + parent.width*0.03125
                 y: -30
                 width: 100
                 height: 122
@@ -102,7 +104,7 @@ ApplicationWindow {
             }
             Rectangle {
                 id: rectanglediscon
-                x: 675
+                x: rectanglecon.x + rectanglecon.width
                 y: -30
                 width: 108
                 height: 122
@@ -125,9 +127,9 @@ ApplicationWindow {
             }
             Rectangle {
                 id: rectangleyourfiles
-                x: 122
-                y: 144
-                width: 289
+                x: mainWindow.width*0.1525
+                y: rectangledown.y
+                width: parent.width*0.36125
                 height: 29
                 opacity: 0.9
                 radius: 10
@@ -138,9 +140,9 @@ ApplicationWindow {
 
             Rectangle {
                 id: rectangleserverfiles
-                x: 511
-                y: 144
-                width: 289
+                x: rectangleyourfiles.x + mainWindow.width*0.48625
+                y: rectangledown.y
+                width: parent.width
                 height: 29
                 opacity: 0.9
                 radius: 10
@@ -150,9 +152,9 @@ ApplicationWindow {
             }
             Rectangle {
                 id: rectangleupload
-                x: 135
-                y: 270
-                width: 340
+                x: clientFiles.x
+                y: 200
+                width: mainWindow.width*0.425
                 height: 85
                 opacity: 0.6
                 color: "#808080"
@@ -171,9 +173,9 @@ ApplicationWindow {
             }
             Rectangle {
                 id: rectangledownload
-                x: 418
-                y: 393
-                width: 382
+                x: rectangleserverfiles.x - mainWindow.width*0.1
+                y: 323
+                width: mainWindow.width
                 height: 85
                 opacity: 0.6
                 color: "#808080"
@@ -192,11 +194,22 @@ ApplicationWindow {
             }
             Rectangle {
                 id: rectangledown
-                x: 122
-                y: 144
-                width: 714
-                height: 472
+                x: mainWindow.width*0.1525
+                y: 100
+                width: parent.width
+                height: 385
                 color: "#ffffff"
+                radius: 10
+                opacity: 0.6
+                border.width: 1
+                border.color: "#000000"
+            }
+            Rectangle {
+                id: rectanglelog
+                x: 0
+                y: rectangledown.y + rectangledown.height + 8
+                width: parent.width*0.99
+                height: mainWindow.height
                 radius: 10
                 opacity: 0.6
                 border.width: 1
@@ -206,10 +219,10 @@ ApplicationWindow {
     ListView {
         id: clientFiles
         objectName: "clientFiles"
-        x: 135
-        y: 179
+        x: rectangledown.x + 13
+        y: rectangleyourfiles.y + 37
         width: 250
-        height: 400
+        height: 310
         cacheBuffer: 319
         model: folderModel
         delegate: clientFileDelegate
@@ -217,10 +230,10 @@ ApplicationWindow {
     ListView {
         id: serverFiles
         objectName: "serverFiles"
-        x: 511
-        y: 179
+        x: rectangleserverfiles.x
+        y: rectangleyourfiles.y + 37
         width: 250
-        height: 400
+        height: 210
         cacheBuffer: 319
         model: serverFilesListModel
         delegate: serverFileDelegate
@@ -230,6 +243,7 @@ ApplicationWindow {
         x: 11
         y: 28
         height: 25
+        width: 124
         text: qsTr("FTP server:")
         font.bold: true
         font.pointSize: 12
@@ -238,9 +252,9 @@ ApplicationWindow {
     TextField {
         id: serverName
         objectName: "serverName"
-        x: 135
+        x: ftpserverlab.x + ftpserverlab.width
         y: 28
-        width: 413
+        width: parent.width*0.51625
         height: 25
         text: "ftp.plgn.ru"
         z: 2
@@ -277,12 +291,13 @@ ApplicationWindow {
         }
         Label {
             id: yourfileslab
-            x: 135
-            y: 148
-            width: 250
-            height: 25
+            x: rectangleyourfiles.x
+            y: rectangleyourfiles.y
+            width: rectangleyourfiles.width
+            height: rectangleyourfiles.height
             text: qsTr("Your files")
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignHCenter
             font.family: "Courier"
             font.pointSize: 12
             font.italic: false
@@ -290,19 +305,22 @@ ApplicationWindow {
         }
         Label {
             id: serverfileslab
-            x: 511
-            y: 148
-            width: 250
-            height: 25
+            x: rectangleserverfiles.x
+            y: rectangleserverfiles.y
+            width: rectangleserverfiles.width
+            height: rectangleserverfiles.height
             text: qsTr("Server files")
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignHCenter
             font.family: "Courier"
+            font.italic: false
             font.bold: true
             font.pointSize: 12
+            z:1
         }
         Rectangle {
             id: connect
-            x: 575
+            x: rectanglecon.x
             y: -30
             width: 100
             height: 122
@@ -311,8 +329,8 @@ ApplicationWindow {
             Image{
                 id: connectIcon
                 y: 40
-                width: 64
-                height: 64
+                width: 69
+                height: 69
                 opacity: 1
                 anchors.horizontalCenterOffset: 2
                 source: "icons/network.png"
@@ -334,7 +352,7 @@ ApplicationWindow {
         }
         Rectangle {
             id: disconnect
-            x: 675
+            x: rectanglediscon.x
             y: -30
             width: 108
             height: 122
@@ -363,15 +381,14 @@ ApplicationWindow {
         }
         Rectangle {
             id: upload
-            x: 390
-            y: 295
+            x: rectangleupload.x + rectangleupload.width - 80
+            y: rectangleupload.y + 14
             width: 66
             height: 51
             color: "#00000000"
             z: 1
             Image{
                 id: uploadIcon
-                y: -6
                 width: 64
                 height: 64
                 anchors.horizontalCenterOffset: 1
@@ -388,15 +405,14 @@ ApplicationWindow {
         }
         Rectangle {
             id: download
-            x: 437
-            y: 400
+            x: rectangledownload.x + 3
+            y: rectangledownload.y
             width: 66
             height: 51
             color: "#00000000"
             z: 1
             Image{
                 id: downloadIcon
-                y: -6
                 width: 64
                 height: 64
                 anchors.horizontalCenterOffset: 1
@@ -421,8 +437,9 @@ ApplicationWindow {
         }
         Label {
             id: connectlab
-            x: 592
+            x: connect.x
             y: 72
+            width: connect.width
             text: qsTr("Connect")
             horizontalAlignment: Text.AlignHCenter
             font.family: "Courier"
@@ -432,8 +449,9 @@ ApplicationWindow {
         }
         Label {
             id: disconnectlab
-            x: 680
+            x: disconnect.x
             y: 72
+            width: disconnect.width
             text: qsTr("Disconnect")
             horizontalAlignment: Text.AlignHCenter
             font.family: "Courier"
@@ -443,8 +461,8 @@ ApplicationWindow {
         }
         Label {
             id: uploadlab
-            x: 393
-            y: 271
+            x: upload.x
+            y: upload.y - 14
             text: qsTr("Upload")
             font.italic: false
             font.pointSize: 12
@@ -454,8 +472,8 @@ ApplicationWindow {
         }
         Label {
             id: downloadlab
-            x: 422
-            y: 457
+            x: download.x
+            y: download.y + 67
             text: qsTr("Download")
             font.italic: false
             font.pointSize: 12
@@ -485,7 +503,7 @@ ApplicationWindow {
     Component {
         id: clientFileDelegate
         Rectangle {
-            width: 250
+            width: mainWindow.width*0.3125
             height: 25
             radius: 5
             gradient: Gradient {
@@ -501,11 +519,11 @@ ApplicationWindow {
             Image{
                 id: filesIcon
                 x: 0;
-                width:25;
+                width: 25
                 anchors.horizontalCenterOffset: 2;
                 source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
             }
-            Text { id: nameClientText; x: 25; width: 215; text: " " + fileName }
+            Text { id: nameClientText; x: filesIcon.x + filesIcon.width; width: 215; text: " " + fileName }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -526,7 +544,7 @@ ApplicationWindow {
         id: serverFileDelegate
         Rectangle {
             id: bodyRect
-            width: 250
+            width: mainWindow.width*0.3125
             height: 25
             radius: 5
             gradient: Gradient {
@@ -546,7 +564,7 @@ ApplicationWindow {
                 anchors.horizontalCenterOffset: 2;
                 source: fileIsDir ? "icons/kdedocumentopen.ico" : "icons/files.ico";
             }
-            //Text { id: isDirserverText; x: 0; width:25; text: fileIsDir ? "d" : "f" }
+
             Text { id: nameServerText; x: 25; width: 215; text: fileName }
             MouseArea {
                 anchors.fill: parent
