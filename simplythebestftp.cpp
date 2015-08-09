@@ -18,6 +18,14 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
     connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
 }
 
+void simplyTheBestFtp::log(const QString &msg) {
+    QVariant returnedValue;
+    QString str = msg;
+    QMetaObject::invokeMethod(this->m_qmlForm, "log",
+                              Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, str.replace("\n", " ")));
+}
+
 void simplyTheBestFtp::listAll() {
     this->serverFiles.clear();
     if (this->state() == QFtp::LoggedIn) {
@@ -38,6 +46,7 @@ void simplyTheBestFtp::listAll() {
 
 void simplyTheBestFtp::connectToServer(const QString &serverName) {
     if (this->state() == QFtp::Unconnected) {
+        this->currentHost = serverName;
         this->connectToHost(serverName);
         this->loginCmdId = this->login();
     }
@@ -59,14 +68,15 @@ void simplyTheBestFtp::cdDir(const QString &dir) {
 
 void simplyTheBestFtp::download(const QString &pwd, const QString &fileName) {
     QString path = pwd.startsWith("file:///") ? pwd.right(pwd.length() - 7) : pwd;
-
     if (this->isDownloading) {
         qDebug() << "already in progress";
+        this->log("Downloading is already in progress.");
         return;
     }
 
     file.setFileName(path + "/" + fileName);
 
+    this->log("Dwonload " + fileName + " to " + path + ".");
     if (this->file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         this->total_bytes = this->serverFiles[fileName].size();
         this->got_bytes = 0;
@@ -75,6 +85,7 @@ void simplyTheBestFtp::download(const QString &pwd, const QString &fileName) {
         this->downloadCmdId = this->get(fileName);
     } else {
         qDebug() << "write failed";
+        this->log(this->file.errorString());
     }
 }
 
@@ -84,18 +95,21 @@ void simplyTheBestFtp::processCommandFinished(int cmd, bool error) {
             this->listAll();
         } else {
             qDebug() << "cd error";
+            this->log(this->errorString());
         }
     } else if (this->loginCmdId == cmd) {
         if (!error) {
             this->listAll();
         } else {
             qDebug() << "login error";
+            this->log(this->errorString());
         }
     } else if (this->downloadCmdId == cmd) {
         if (!error) {
             this->downloadFinished();
         } else {
             qDebug() << "get error";
+            this->log(this->errorString());
         }
     }
 }
@@ -105,28 +119,28 @@ void simplyTheBestFtp::processStateChanged(int state) {
 
     switch (state) {
     case QFtp::Unconnected:
-        strState = "Unconnected.";
+        strState = "Unconnected";
         break;
     case QFtp::HostLookup:
-        strState = "Host lookup...";
+        strState = "Host lookup " + this->currentHost;
         break;
     case QFtp::Connecting:
-        strState = "Connecting...";
+        strState = "Connecting " + this->currentHost;
         break;
     case QFtp::Connected:
-        strState = "Connected.";
+        strState = "Connected";
         break;
     case QFtp::LoggedIn:
-        strState = "Logged in.";
+        strState = "Logged in";
         break;
     case QFtp::Closing:
-        strState = "Closing...";
+        strState = "Closing";
         break;
     default:
         break;
     };
 
-    this->m_qmlForm->setProperty("state", strState);
+    this->log(strState);
 }
 
 void simplyTheBestFtp::processListInfo(QUrlInfo entry) {

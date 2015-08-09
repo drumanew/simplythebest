@@ -23,8 +23,13 @@ ApplicationWindow {
         progressBar.value = got/total;
     }
 
+    function log(msg) {
+        logListModel.append({msgText: (new Date()).toLocaleString(locale, "dd.MM.yyyy hh.mm.ss") + ": " + msg})
+        //mainWindow.state += "\n" + (new Date()).toLocaleString(locale, "dd.MM.yyyy hh.mm.ss") + ": " + msg;
+    }
+
     property alias serverNameText: serverName.text
-    property alias state: statusLabel.text
+    property var locale: Qt.locale()
 
     id: mainWindow
     objectName: "mainWindow"
@@ -91,7 +96,11 @@ ApplicationWindow {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
-                        parent.opacity = 1
+                        parent.opacity = 1onCountChanged: {
+                            var newIndex = count - 1 // last index
+                            positionViewAtEnd()
+                            currentIndex = newIndex
+                        }
                     }
                     onClicked: {
                         serverFilesListModel.clear();
@@ -214,6 +223,30 @@ ApplicationWindow {
                 opacity: 0.6
                 border.width: 1
                 border.color: "#000000"
+                ListView {
+                    id: logListView
+                    width: parent.width
+                    height: mainWindow.height - parent.y - 4
+                    clip: true
+                    model: ListModel { id: logListModel }
+                    delegate: Rectangle {
+                        width: parent.width
+                        height: 25
+                        radius: 10
+                        Label {
+                            id: statusLabel
+                            text: msgText
+                            font.family: "Arial"
+                            font.italic: true
+                            font.pointSize: 11
+                        }
+                    }
+                    onCountChanged: {
+                        var newIndex = count - 1 // last index
+                        positionViewAtEnd()
+                        currentIndex = newIndex
+                    }
+                }
             }
 
     ListView {
@@ -278,17 +311,7 @@ ApplicationWindow {
         }
 
     }
-        Label {
-            id: statusLabel
-            x: 100
-            y: 80
-            width: 427
-            height: 25
-            text: qsTr("Unconnected.")
-            font.family: "Arial"
-            font.italic: true
-            font.pointSize: 11
-        }
+
         Label {
             id: yourfileslab
             x: rectangleyourfiles.x
