@@ -16,6 +16,7 @@ private:
 
     QMap<QString, QUrlInfo> serverFiles;
 
+    QString currentHost;
     QFile    file;
     quint64  got_bytes;
     quint64  total_bytes;
@@ -25,6 +26,7 @@ private:
     int cdCmdId;
     int downloadCmdId;
 
+    void log(const QString &);
     void updateDownloadProgress();
     void abortDownload();
     void downloadFinished();
