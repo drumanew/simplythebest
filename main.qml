@@ -6,7 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import Qt.labs.folderlistmodel 2.1
 
 ApplicationWindow {
-    signal connectToServer(string server)
+    signal connectToServer(string server, string login, string password)
     signal disconnectFromServer()
     signal cdDir(string dir)
     signal download(string pwd, string file)
@@ -134,11 +134,7 @@ ApplicationWindow {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: {
-                        parent.opacity = 1onCountChanged: {
-                            var newIndex = count - 1 // last index
-                            positionViewAtEnd()
-                            currentIndex = newIndex
-                        }
+                        parent.opacity = 1
                     }
                     onClicked: {
                         serverFilesListModel.clear();
@@ -407,7 +403,9 @@ ApplicationWindow {
                         parent.source = "icons/networkOnHover.png"
                     onClicked: {
                         parent.source = "icons/networkOnClick.png"
-                        mainWindow.connectToServer(serverNameText);
+                        var login = "";
+                        var password = "";
+                        mainWindow.connectToServer(serverNameText, login, password);
                     }
                     onExited:
                         parent.source = "icons/network.png"

@@ -6,8 +6,9 @@ simplyTheBestFtp::simplyTheBestFtp(QObject *qmlForm)
     this->isDownloading = false;
     this->got_bytes = 0;
     this->total_bytes = 0;
+    this->username = "anonymous";
 
-    connect(this->m_qmlForm, SIGNAL(connectToServer(QString)), this, SLOT(connectToServer(QString)));
+    connect(this->m_qmlForm, SIGNAL(connectToServer(QString, QString, QString)), this, SLOT(connectToServer(QString, QString, QString)));
     connect(this->m_qmlForm, SIGNAL(disconnectFromServer()), this, SLOT(disconnectFromServer()));
     connect(this->m_qmlForm, SIGNAL(cdDir(QString)), this, SLOT(cdDir(QString)));
     connect(this->m_qmlForm, SIGNAL(download(QString,QString)), this, SLOT(download(QString,QString)));
@@ -44,11 +45,11 @@ void simplyTheBestFtp::listAll() {
     }
 }
 
-void simplyTheBestFtp::connectToServer(const QString &serverName) {
+void simplyTheBestFtp::connectToServer(const QString &serverName, const QString &login, const QString &password) {
     if (this->state() == QFtp::Unconnected) {
         this->currentHost = serverName;
         this->connectToHost(serverName);
-        this->loginCmdId = this->login();
+        this->loginCmdId = this->login(login, password);
     }
 }
 
@@ -131,7 +132,7 @@ void simplyTheBestFtp::processStateChanged(int state) {
         strState = "Connected";
         break;
     case QFtp::LoggedIn:
-        strState = "Logged in";
+        strState = "Logged in as " + this->username;
         break;
     case QFtp::Closing:
         strState = "Closing";
