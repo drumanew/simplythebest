@@ -10,6 +10,7 @@ ApplicationWindow {
     signal disconnectFromServer()
     signal cdDir(string dir)
     signal download(string pwd, string file)
+    signal upload(string pwd, string file)
 
     function clearServerFiles() {
         serverFilesListModel.clear();
@@ -65,11 +66,10 @@ ApplicationWindow {
                 y: rectangledown.y + rectangledown.height - 10
                 width: rectangledown.width
                 height: 10
-
-                ColorAnimation {
-                    from: "white"
-                    to: "#000029"
-                    duration: 200
+                style: ProgressBarStyle {
+                    Rectangle {
+                        ColorAnimation { from: "white"; to: "black"; duration: 200 }
+                    }
                 }
                 value: 0;
                 visible: true;
@@ -476,7 +476,15 @@ ApplicationWindow {
                     anchors.fill: parent
                     hoverEnabled: true
                     onEntered: parent.source = "icons/uploadDocumentOnHover.png"
-                    onClicked: parent.source = "icons/uploadDocumentOnClick.png"
+                    onClicked: {
+                        parent.source = "icons/uploadDocumentOnClick.png";
+                        var file = folderModel.get(clientFiles.currentIndex, "fileName");
+                        var isDir = folderModel.get(clientFiles.currentIndex, "fileIsDir");
+                        var pwd = folderModel.folder;
+                        if (folderModel.count && !isDir) {
+                            mainWindow.upload(pwd, file);
+                        }
+                    }
                     onExited: parent.source = "icons/uploadDocument.png"
                 }
             }
